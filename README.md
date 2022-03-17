@@ -2,6 +2,18 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
 
+## Installation
+
+Pull the repository and run `npm ci` to install packages.
+
+## Configuration
+
+Open the file `src/environments/environment.ts` and correctly edit the following values:
+```
+  'client-id': '...',
+  'client-secret': '...',
+```
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
