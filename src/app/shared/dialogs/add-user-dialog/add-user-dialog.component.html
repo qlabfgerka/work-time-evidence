@@ -1,0 +1,53 @@
+<div class="flexbox">
+  <form
+    class="form"
+    [formGroup]="addUserForm"
+    (ngSubmit)="addUser()"
+    *ngIf="addUserForm"
+  >
+    <h1 class="center-text">Add user</h1>
+    <div class="break"></div>
+
+    <mat-form-field class="wide" appearance="fill">
+      <mat-label>First name</mat-label>
+      <input matInput formControlName="firstName" />
+      <mat-error *ngIf="errorControl?.['firstName']?.errors?.['required']">
+        Please enter a first name.
+      </mat-error>
+    </mat-form-field>
+
+    <div class="break"></div>
+
+    <mat-form-field class="wide" appearance="fill">
+      <mat-label>Last name</mat-label>
+      <input matInput formControlName="lastName" />
+      <mat-error *ngIf="errorControl?.['lastName']?.errors?.['required']">
+        Please enter a last name.
+      </mat-error>
+    </mat-form-field>
+
+    <div class="break"></div>
+
+    <mat-form-field class="wide" appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" />
+      <mat-error *ngIf="errorControl?.['email']?.errors?.['required']">
+        Please enter an email.
+      </mat-error>
+      <mat-error *ngIf="errorControl?.['email']?.errors?.['email']">
+        Please enter a valid email.
+      </mat-error>
+    </mat-form-field>
+
+    <div class="break"></div>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!addUserForm.valid"
+    >
+      ADD
+    </button>
+  </form>
+</div>
