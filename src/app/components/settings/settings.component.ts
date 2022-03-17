@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { take } from 'rxjs';
 import { AuthorizationDTO } from 'src/app/models/token/authorization.model';
 import { AuthService } from 'src/app/services/users/auth/auth.service';
@@ -10,7 +11,10 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {}
 
   ngOnInit(): void {}
 
@@ -25,6 +29,8 @@ export class SettingsComponent implements OnInit {
     this.authService
       .authorize(auth)
       .pipe(take(1))
-      .subscribe(() => {});
+      .subscribe(() => {
+        this.router.navigate(['']);
+      });
   }
 }
