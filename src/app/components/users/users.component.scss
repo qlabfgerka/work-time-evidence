@@ -1,0 +1,34 @@
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 20%;
+}
+
+.wide {
+  width: 90%;
+}
+
+.mat-column-firstName {
+  width: 10%;
+}
+
+.mat-column-lastName {
+  width: 10%;
+}
+
+.mat-column-email {
+  width: 40%;
+}
+
+.aside {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clickable {
+  cursor: pointer;
+}
