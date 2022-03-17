@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { take } from 'rxjs';
 import { AbsenceDTO } from 'src/app/models/absence/absence.model';
+import { DateFilterDTO } from 'src/app/models/filter/date.filter.model';
 import { AbsencesService } from 'src/app/services/users/absences/absences.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class AbsencesComponent implements OnInit {
   public dataSource!: MatTableDataSource<AbsenceDTO>;
   public absences!: Array<AbsenceDTO>;
 
+  public filter: DateFilterDTO | null = null;
   public displayedColumns: string[] = [
     'firstName',
     'lastName',
@@ -46,7 +48,16 @@ export class AbsencesComponent implements OnInit {
   }
 
   public applyDateFilter(): void {
-    console.log(this.dateForm.value);
+    this.filter = new DateFilterDTO();
+    this.filter.start = this.dateForm.get('start')?.value;
+    this.filter.end = this.dateForm.get('end')?.value;
+    this.refresh();
+  }
+
+  public reset(): void {
+    this.filter = null;
+    this.dateForm.reset();
+    this.refresh();
   }
 
   public applyFilter(event: Event) {
@@ -58,13 +69,42 @@ export class AbsencesComponent implements OnInit {
     }
   }
 
+  public sortData(sort: Sort) {
+    const data = this.absences.slice();
+    if (!sort.active || sort.direction === '') {
+      this.dataSource.data = data;
+      return;
+    }
+
+    this.dataSource.data = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'firstName':
+          return this.compare(a.firstName!, b.firstName!, isAsc);
+        case 'lastName':
+          return this.compare(a.lastName!, b.lastName!, isAsc);
+        case 'absenceDefinition':
+          return this.compare(
+            a.absenceDefinitionName!,
+            b.absenceDefinitionName!,
+            isAsc
+          );
+        case 'comment':
+          return this.compare(a.comment!, b.comment!, isAsc);
+        case 'time':
+          return this.compare(a.timestamp!, b.timestamp!, isAsc);
+        default:
+          return 0;
+      }
+    });
+  }
+
   private refresh(): void {
     this.absencesService
-      .getAbsences()
+      .getAbsences(this.filter)
       .pipe(take(1))
       .subscribe((absences: Array<AbsenceDTO>) => {
         this.absences = absences;
-        console.log(this.absences);
         this.initTable();
       });
   }
@@ -82,5 +122,13 @@ export class AbsencesComponent implements OnInit {
         )
       );
     };
+  }
+
+  private compare(
+    a: number | string | Date,
+    b: number | string | Date,
+    isAsc: boolean
+  ): number {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }
