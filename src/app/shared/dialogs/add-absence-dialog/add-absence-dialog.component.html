@@ -1,0 +1,44 @@
+<div class="flexbox" *ngIf="!isLoading">
+  <form
+    class="form"
+    [formGroup]="addAbsenceForm"
+    (ngSubmit)="addAbsence()"
+    *ngIf="addAbsenceForm"
+  >
+    <h1 class="center-text">Choose absence</h1>
+    <div class="break"></div>
+
+    <mat-form-field class="wide" appearance="fill">
+      <mat-label>Absence definition</mat-label>
+      <mat-select formControlName="absence">
+        <mat-option
+          *ngFor="let absenceDefinition of absenceDefinitions"
+          [value]="absenceDefinition.id"
+          >{{ absenceDefinition.name }}</mat-option
+        >
+      </mat-select>
+      <mat-error *ngIf="errorControl?.['absence']?.errors?.['required']">
+        Please pick an absence definition.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="wide" appearance="fill">
+      <mat-label>Comment</mat-label>
+      <input matInput formControlName="comment" />
+      <mat-error *ngIf="errorControl?.['comment']?.errors?.['required']">
+        Please enter a comment.
+      </mat-error>
+    </mat-form-field>
+
+    <div class="break"></div>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!addAbsenceForm.valid"
+    >
+      ADD
+    </button>
+  </form>
+</div>
