@@ -5,6 +5,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { take } from 'rxjs';
 import { UserDTO } from 'src/app/models/user/user.model';
 import { UsersService } from 'src/app/services/users/users.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddUserDialogComponent } from 'src/app/shared/dialogs/add-user-dialog/add-user-dialog.component';
+import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-users',
@@ -20,7 +23,11 @@ export class UsersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly snackbarService: SnackbarService,
+    private readonly dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.refresh();
@@ -33,6 +40,24 @@ export class UsersComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  public addUser(): void {
+    const dialogRef = this.dialog.open(AddUserDialogComponent, {
+      panelClass: 'wide-dialog',
+    });
+
+    dialogRef.afterClosed().subscribe((user: UserDTO) => {
+      this.usersService
+        .addUser(user)
+        .pipe(take(1))
+        .subscribe((user: UserDTO) => {
+          this.snackbarService.openSnackbar(
+            `User ${user.firstName} ${user.lastName} added successfully`
+          );
+          this.refresh();
+        });
+    });
   }
 
   private refresh(): void {

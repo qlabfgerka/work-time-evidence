@@ -9,6 +9,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { AddUserDialogModule } from 'src/app/shared/dialogs/add-user-dialog/add-user-dialog.module';
 
 @NgModule({
   declarations: [UsersComponent],
@@ -21,6 +22,7 @@ import { MatInputModule } from '@angular/material/input';
     MatPaginatorModule,
     MatSortModule,
     MatButtonModule,
+    AddUserDialogModule,
   ],
 })
 export class UsersModule {}

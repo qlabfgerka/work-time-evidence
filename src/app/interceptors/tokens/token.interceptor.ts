@@ -4,14 +4,21 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/users/auth/auth.service';
+import { Router } from '@angular/router';
+import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly snackbarService: SnackbarService
+  ) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -25,6 +32,9 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error) => {
         this.authService.deleteToken();
+        this.snackbarService.openSnackbar('You have been logged out.');
+        this.router.navigate(['settings']);
+
         return throwError(() => new Error(error));
       })
     );

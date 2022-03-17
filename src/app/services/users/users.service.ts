@@ -13,11 +13,13 @@ export class UsersService {
   public getUsers(): Observable<Array<UserDTO>> {
     return this.httpClient
       .get<Array<UserDTO>>(`${environment['api-hostname']}/Users`)
-      .pipe(
-        map((response) => {
-          return this.mapToUsers(response);
-        })
-      );
+      .pipe(map((response) => this.mapToUsers(response)));
+  }
+
+  public addUser(user: UserDTO): Observable<UserDTO> {
+    return this.httpClient
+      .post<UserDTO>(`${environment['api-hostname']}/Users`, user)
+      .pipe(map((response) => this.mapUser(response)));
   }
 
   private mapToUsers(users: Array<any>): Array<UserDTO> {
