@@ -1,0 +1,87 @@
+<div class="flexbox">
+  <form
+    class="form"
+    [formGroup]="dateForm"
+    (ngSubmit)="applyDateFilter()"
+    *ngIf="dateForm"
+  >
+    <h1 class="center-text">Pick range</h1>
+    <div class="break"></div>
+
+    <mat-form-field class="wide" appearance="fill">
+      <mat-label>Date range</mat-label>
+      <mat-date-range-input [rangePicker]="rangePicker">
+        <input matStartDate placeholder="Start date" formControlName="start" />
+        <input matEndDate placeholder="End date" formControlName="end" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="rangePicker"
+      ></mat-datepicker-toggle>
+      <mat-date-range-picker #rangePicker></mat-date-range-picker>
+    </mat-form-field>
+
+    <div class="flexbox">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!dateForm.valid"
+      >
+        UPDATE
+      </button>
+    </div>
+  </form>
+
+  <div class="break"></div>
+
+  <div class="wide">
+    <mat-form-field appearance="standard">
+      <mat-label>Filter</mat-label>
+      <input
+        matInput
+        (keyup)="applyFilter($event)"
+        placeholder="Ex. Mia"
+        #input
+      />
+    </mat-form-field>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="firstName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>First name</th>
+          <td mat-cell *matCellDef="let row">{{ row.firstName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Last name</th>
+          <td mat-cell *matCellDef="let row">{{ row.lastName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="absenceDefinition">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Absence Definition
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.absenceDefinition }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="comment">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Comment</th>
+          <td mat-cell *matCellDef="let row">{{ row.comment }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="time">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+          <td mat-cell *matCellDef="let row">{{ row.timestamp | date }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        aria-label="Select page of users"
+      ></mat-paginator>
+    </div>
+  </div>
+</div>

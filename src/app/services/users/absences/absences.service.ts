@@ -11,6 +11,12 @@ import { environment } from 'src/environments/environment';
 export class AbsencesService {
   constructor(private readonly httpClient: HttpClient) {}
 
+  public getAbsences(): Observable<Array<AbsenceDTO>> {
+    return this.httpClient
+      .get<Array<AbsenceDTO>>(`${environment['api-hostname']}/Absences`)
+      .pipe(map((response) => this.mapToAbsences(response)));
+  }
+
   public getAbsenceDefinitions(): Observable<Array<AbsenceDefinitionsDTO>> {
     return this.httpClient
       .get<Array<AbsenceDefinitionsDTO>>(
@@ -19,11 +25,31 @@ export class AbsencesService {
       .pipe(map((response) => this.mapToAbsenceDefinitions(response)));
   }
 
-  public addAbsence(absence: AbsenceDTO): Observable<void> {
-    return this.httpClient.post<void>(
-      `${environment['api-hostname']}/Absences`,
-      absence
-    );
+  public addAbsence(absence: AbsenceDTO): Observable<AbsenceDTO> {
+    return this.httpClient
+      .post<AbsenceDTO>(`${environment['api-hostname']}/Absences`, absence)
+      .pipe(map((response) => this.mapAbsence(response)));
+  }
+
+  private mapToAbsences(absences: Array<any>): Array<AbsenceDTO> {
+    let absencesDTO = new Array();
+    absences.forEach((absence) => {
+      absencesDTO.push(this.mapAbsence(absence));
+    });
+    return absencesDTO;
+  }
+
+  private mapAbsence(absence: any): AbsenceDTO {
+    const absenceDTO: AbsenceDTO = {
+      absenceDefinitionId: absence.AbsenceDefinitionId,
+      comment: absence.Comment,
+      timestamp: absence.Timestamp,
+      absenceDefinitionName: absence.AbsenceDefinitionName,
+      firstName: absence.FirstName,
+      lastName: absence.LastName,
+      userId: absence.UserId,
+    };
+    return absenceDTO;
   }
 
   private mapToAbsenceDefinitions(
