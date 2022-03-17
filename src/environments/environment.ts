@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  'api-hostname': 'https://api4.allhours.com/',
+  'login-hostname': 'https://login.allhours.com/connect/token',
+  'client-id': '...',
+  'client-secret': '...',
 };
 
 /*
