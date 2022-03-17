@@ -9,9 +9,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddUserDialogComponent } from 'src/app/shared/dialogs/add-user-dialog/add-user-dialog.component';
 import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 import { AddAbsenceDialogComponent } from 'src/app/shared/dialogs/add-absence-dialog/add-absence-dialog.component';
-import { AbsenceDefinitionsDTO } from 'src/app/models/absence/absence-definitions.model';
 import { AbsenceDTO } from 'src/app/models/absence/absence.model';
 import { AbsencesService } from 'src/app/services/users/absences/absences.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users',
@@ -37,11 +37,16 @@ export class UsersComponent implements OnInit {
     private readonly usersService: UsersService,
     private readonly snackbarService: SnackbarService,
     private readonly absenceService: AbsencesService,
+    private readonly router: Router,
     private readonly dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.refresh();
+  }
+
+  public navigateAbsences(): void {
+    this.router.navigate(['absences']);
   }
 
   public applyFilter(event: Event) {

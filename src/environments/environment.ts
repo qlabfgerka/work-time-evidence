@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  'api-hostname': 'https://api4.allhours.com/',
+  'api-hostname': 'https://api4.allhours.com/api/v1',
   'login-hostname': 'https://login.allhours.com/connect/token',
   'client-id': '...',
   'client-secret': '...',
